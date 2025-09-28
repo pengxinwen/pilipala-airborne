@@ -20,6 +20,7 @@ import 'package:pilipala/services/service_locator.dart';
 import 'package:pilipala/utils/feed_back.dart';
 import 'package:pilipala/utils/global_data_cache.dart';
 import 'package:pilipala/utils/storage.dart';
+import 'package:pilipala/services/sponsor_block_service.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -632,6 +633,12 @@ class PlPlayerController {
       _position.value = position;
       updatePositionSecond();
       _heartDuration = position.inSeconds;
+      
+      // 通知 SponsorBlock 服务用户进行了手动跳转
+      if (type == 'seek' || type == 'slider') {
+        SponsorBlockService.instance.onManualSeek(position.inSeconds.toDouble());
+      }
+      
       if (duration.value.inSeconds != 0) {
         if (type != 'slider') {
           await _videoPlayerController?.stream.buffer.first;

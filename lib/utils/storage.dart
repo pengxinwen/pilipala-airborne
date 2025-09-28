@@ -99,6 +99,14 @@ class SettingBoxKey {
       enableBackgroundPlay = 'enableBackgroundPlay',
       fullScreenGestureMode = 'fullScreenGestureMode',
 
+      /// SponsorBlock 相关设置
+      enableSponsorBlock = 'enableSponsorBlock',
+      sponsorBlockUserId = 'sponsorBlockUserId',
+      sponsorBlockCategories = 'sponsorBlockCategories',
+      sponsorBlockAutoSkip = 'sponsorBlockAutoSkip',
+      sponsorBlockShowToast = 'sponsorBlockShowToast',
+      sponsorBlockSkipAnimation = 'sponsorBlockSkipAnimation',
+
       /// 隐私
       blackMidsList = 'blackMidsList',
 

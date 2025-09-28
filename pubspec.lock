@@ -874,10 +874,10 @@ packages:
     dependency: transitive
     description:
       name: mailer
-      sha256: d25d89555c1031abacb448f07b801d7c01b4c21d4558e944b12b64394c84a3cb
+      sha256: db61f51ea301e8dcbfe5894e037ccd30a6246eb0a7bcfa007aefa2fc11a8f96e
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.1.0"
+    version: "6.5.0"
   matcher:
     dependency: transitive
     description:
@@ -1643,10 +1643,10 @@ packages:
     dependency: transitive
     description:
       name: volume_controller
-      sha256: "189bdc7a554f476b412e4c8b2f474562b09d74bc458c23667356bce3ca1d48c9"
+      sha256: c71d4c62631305df63b72da79089e078af2659649301807fa746088f365cb48e
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.7"
+    version: "2.0.8"
   wakelock_plus:
     dependency: "direct main"
     description:

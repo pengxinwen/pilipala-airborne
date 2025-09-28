@@ -9,6 +9,8 @@ import 'package:ns_danmaku/ns_danmaku.dart';
 import 'package:pilipala/http/constants.dart';
 import 'package:pilipala/http/user.dart';
 import 'package:pilipala/http/video.dart';
+import 'package:pilipala/services/sponsor_block_service.dart';
+import 'package:pilipala/common/widgets/sponsor_block_submit_dialog.dart';
 import 'package:pilipala/models/common/reply_type.dart';
 import 'package:pilipala/models/common/search_type.dart';
 import 'package:pilipala/models/video/later.dart';
@@ -299,6 +301,9 @@ class VideoDetailController extends GetxController
     plPlayerController.headerControl = headerControl;
 
     plPlayerController.subtitles.value = subtitles;
+
+    /// 初始化 SponsorBlock 服务
+    await _initializeSponsorBlock();
   }
 
   // 视频链接
@@ -672,9 +677,58 @@ class VideoDetailController extends GetxController
     isWatchLaterVisible.value = tabCtr.index == 0;
   }
 
+  /// 初始化 SponsorBlock 服务
+  Future<void> _initializeSponsorBlock() async {
+    try {
+      await SponsorBlockService.instance.initializeVideo(
+        videoId: bvid,
+        playerController: plPlayerController,
+      );
+    } catch (error) {
+      print('SponsorBlock initialization failed: $error');
+    }
+  }
+
+  /// 显示 SponsorBlock 片段提交界面
+  void showSponsorBlockSubmitDialog() {
+    if (plPlayerController.position.value == Duration.zero) {
+      SmartDialog.showToast('请先开始播放视频');
+      return;
+    }
+
+    final currentTime = plPlayerController.position.value.inSeconds.toDouble();
+    
+    showDialog(
+      context: Get.context!,
+      builder: (context) => SponsorBlockSubmitDialog(
+        videoId: bvid,
+        currentTime: currentTime,
+        onSubmit: (startTime, endTime, category, description) async {
+          final success = await SponsorBlockService.instance.submitSegment(
+            videoId: bvid,
+            startTime: startTime,
+            endTime: endTime,
+            category: category,
+            description: description,
+          );
+          
+          if (success) {
+            Get.back();
+          }
+        },
+      ),
+    );
+  }
+
+  /// 获取 SponsorBlock 统计信息
+  Map<String, dynamic> getSponsorBlockStats() {
+    return SponsorBlockService.instance.getVideoStats();
+  }
+
   @override
   void onClose() {
     super.onClose();
+    SponsorBlockService.instance.dispose();
     plPlayerController.dispose();
     tabCtr.removeListener(() {
       onTabChanged();
